@@ -1,189 +1,133 @@
 # 砚习 · 个人写作训练助手
 
-砚习是一个面向小说作者、网文新人和长期写作者的本地训练系统。第一阶段已经实现“抽题 → 计时写作 → 自动保存 → 完成训练 → 查看统计 → 回顾作品”的完整闭环；第二阶段已加入动态人物身份调查档案。
+[![Release](https://img.shields.io/github/v/release/risievol2-alt/writing-assistant?display_name=tag)](https://github.com/risievol2-alt/writing-assistant/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-2d5146)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-22.13%2B-5FA04E)](https://nodejs.org/)
 
-## 第一阶段已完成
+砚习是面向小说作者、网文新人和长期写作者的本地写作训练系统。它把随机抽题、计时写作、自动保存、作品回顾和成长统计串成每日可重复的训练闭环，并提供可动态扩展的人物身份调查档案。
 
-- 首页 Dashboard：连续写作天数、累计字数、完成次数、专注时长、今日训练、近七天节奏、最近作品。
-- 写作训练：9 类训练、随机抽题、训练要求、难度、字数与时间限制、题目收藏。
-- Markdown 写作台：标题、H1/H2、加粗、强调、引用、分段、字数统计、计时/暂停、修改次数、自动保存。
-- 作品管理：新建、编辑、删除、搜索、分类、状态与最近更新时间。
-- 训练题库：12 道内置题目、类型筛选、收藏筛选、完成记录、随机抽取。
-- 写作统计：7/30/90 天字数、写作时长、训练次数、训练类型分布和薄弱项提示。
-- AI 接口预留：只定义评价入口，不替用户改稿。
-- 响应式界面：桌面侧边栏与手机底部导航。
+> 所有作品与人物资料默认只保存在本机 SQLite 数据库中。
 
-## 人物库已完成
+## 项目截图
 
-- 人物档案：新建、查看、编辑、删除，以及人物卡片展示。
-- 动态调查表：99 个默认调查字段，严格分为身份信息、身体信息、健康信息、成长经历、心理信息、社会关系、职业经济、性格、能力特长、兴趣习惯、其他。
-- 动态组件：支持单行文本、数字、日期、多行文本、标签、下拉选择、多选和图片。
-- 检索筛选：按姓名搜索，并按一个或多个性格标签筛选。
-- 字段管理：新增、修改、分类、描述、排序、拖动排序、上下移动和软删除。
-- 数据保留：字段隐藏后，人物已填写的值仍保留在 SQLite 中。
-- 自动初始化：首次安装或新建数据库时载入完整默认人物调查字段。
+### 写作 Dashboard
 
-## 技术栈
+![砚习写作 Dashboard](docs/images/dashboard.png)
 
-- 前端：React 19、Vite、Tailwind CSS 4（基础层）与定制样式。
-- 后端：Node.js、Express 5。
-- 数据库：SQLite，使用 Node.js 自带的 `node:sqlite`。
-- 包管理：pnpm。
+### 动态人物库
 
-## 项目结构
+![砚习人物库](docs/images/character-library.png)
+
+## 功能特点
+
+- **每日写作闭环**：随机训练题、训练要求、倒计时、字数统计、自动保存和完成记录。
+- **Markdown 写作台**：标题、加粗、强调、引用、分段、写作时长和修改次数。
+- **训练题库**：9 类训练、12 道内置题目、难度与字数限制、收藏和完成筛选。
+- **作品管理**：练习、章节、人物资料、世界观资料和废稿的增删改查、搜索与标签。
+- **成长统计**：连续写作、累计字数、7/30/90 天趋势、训练分布和薄弱项提示。
+- **动态人物档案**：99 个默认调查字段，覆盖身份、身体、健康、成长、关系、性格、能力和兴趣。
+- **字段管理系统**：字段新增、修改、拖动排序和软删除；人物详情页由字段配置自动生成。
+- **本地优先**：SQLite 本机存储，不上传文章；桌面与移动尺寸均可使用。
+- **AI 接口预留**：未来只帮助发现问题和给出训练建议，不直接替作者改稿。
+
+## Windows 免安装运行
+
+不想配置开发环境时，可从 [Releases](https://github.com/risievol2-alt/writing-assistant/releases/latest) 下载 `windows-x64.zip`：
+
+1. 完整解压 ZIP。
+2. 双击 `Start-Inkstone.cmd`。
+3. 浏览器自动打开 `http://127.0.0.1:8787`。
+
+便携版已包含 Node.js 运行时，无需安装 Node.js、pnpm 或 SQLite。写作数据保存在解压目录的 `database/writing-assistant.db`，升级前请备份该文件。
+
+## 技术实现
+
+| 层级 | 技术 | 实现方式 |
+| --- | --- | --- |
+| 前端 | React 19、Vite、Tailwind CSS 4 | 单页应用，响应式侧边栏/底部导航，生产文件由 Express 托管 |
+| 后端 | Node.js、Express 5 | REST API，统一提供训练、作品、统计和人物档案能力 |
+| 数据库 | SQLite、`node:sqlite` | 零配置本地持久化，启动时自动建表并初始化题库与人物字段 |
+| 人物系统 | 动态键值模型 | `Character`、`Character_Field`、`Character_Value`，新增字段无需修改详情页代码 |
+| 测试 | Node.js Test Runner | API、统计、动态字段、搜索筛选和工具函数测试 |
+| 发布 | PowerShell、GitHub Releases | 白名单构建 Windows x64 便携 ZIP，运行时与源码分离 |
 
 ```text
 writing-assistant
-├── frontend          # React 应用与动态人物档案页面
+├── frontend          # React 页面与交互
 ├── backend           # Express API
-├── database          # SQLite schema、题库/人物字段种子与本地数据库
-├── docs              # 架构与接口说明
-├── package.json
+├── database          # Schema、题库与人物字段种子
+├── docs              # 架构、接口、路线图与截图
+├── scripts           # 便携版构建脚本
+├── LICENSE
 └── README.md
 ```
 
-## 本地运行
+## 源码运行
 
-环境要求：
-
-- Node.js `22.13` 或更高版本（需要 `node:sqlite`）
-- pnpm `10` 或更高版本
-
-首次安装：
+环境要求：Node.js `22.13+`、pnpm `10+`。
 
 ```bash
+git clone https://github.com/risievol2-alt/writing-assistant.git
 cd writing-assistant
 pnpm setup
 ```
 
-打开两个终端。
-
-终端一启动后端：
+开发时打开两个终端：
 
 ```bash
+# 终端一：后端
 pnpm dev:backend
-```
 
-终端二启动前端：
-
-```bash
+# 终端二：前端
 pnpm dev:frontend
 ```
 
-浏览器访问 `http://127.0.0.1:5173`。前端会把 `/api` 请求代理到 `http://127.0.0.1:8787`。
+访问 `http://127.0.0.1:5173`。数据库会自动创建在 `database/writing-assistant.db`。
 
-数据库会自动创建在 `database/writing-assistant.db`。删除该文件可恢复为空白数据库，下一次启动时会重新载入内置题库和 99 个默认人物调查字段。删除数据库文件会同时删除所有本地作品和人物，请先备份。
-
-## 生产方式运行
+生产方式运行：
 
 ```bash
 pnpm build
 pnpm --dir backend start
 ```
 
-然后访问 `http://127.0.0.1:8787`。Express 会同时提供 API 与构建后的前端文件。
+访问 `http://127.0.0.1:8787`。
 
-## 测试
+## 测试与便携版构建
 
 ```bash
 pnpm test
+pnpm portable
 ```
 
-当前覆盖：
+`pnpm portable` 会在 `artifacts/` 生成 Windows x64 ZIP。构建采用文件白名单，不会包含本地数据库、Cookie、`.env` 或测试/扫描结果。
 
-- 题库按类型随机抽题与收藏。
-- 文稿创建、自动保存、完成训练。
-- 30 天统计聚合。
-- 中英文混合字数统计与展示格式。
-- 99 个默认人物字段及字段类型、分组与顺序。
-- 人物创建、编辑、删除、姓名搜索和性格标签筛选。
-- 自定义字段新增、修改、排序和软删除后保留已有值。
-- 前端生产构建。
-- 浏览器实际走通“进入训练 → 写作 → 自动保存 → 完成 → Dashboard 更新”。
-- 浏览器实际走通“新建人物 → 填写动态字段 → 添加性格标签 → 保存 → 搜索/筛选 → 查看字段管理”。
+## API 与数据设计
 
-## 分模块开发记录
+- [API 说明](docs/API.md)
+- [架构设计](docs/ARCHITECTURE.md)
+- [开发路线图](docs/ROADMAP.md)
 
-### 1. 项目骨架
+人物档案没有把年龄、身高、性格等字段写死在人物主表中：字段定义保存在 `Character_Field`，人物填写内容保存在 `Character_Value`。用户新增“喜欢的武器”等字段后，所有人物档案会自动显示，无需修改前端页面。
 
-新增/调整：
+## 简历项目描述
 
-- `frontend/package.json`、`frontend/vite.config.js`、`frontend/index.html`
-- `backend/package.json`
-- `database/`、`docs/`
-- 根目录 `package.json`、`.gitignore`
+> **砚习 · 个人写作训练助手** — 独立完成 React、Express 与 SQLite 全栈应用，实现每日写作训练、自动保存、成长统计及 99 字段动态人物档案系统；设计可扩展的动态字段数据模型，并提供 GitHub Release **Windows 免安装运行**版本。项目地址：https://github.com/risievol2-alt/writing-assistant
 
-结果：前后端独立开发，生产环境由 Express 统一提供。
+## 路线图
 
-### 2. SQLite、题库与作品 API
+- 多小说项目与人物模板导入/导出。
+- 世界观规则库、三幕结构和黄金三章分析。
+- 人物关系图与时间线。
+- AI 评价与编辑助手接口。
+- 云同步与多端数据迁移。
 
-新增：
+## 数据与隐私
 
-- `database/schema.sql`
-- `database/seed-prompts.json`
-- `backend/src/db.js`
-- `backend/src/app.js`
-- `backend/src/server.js`
-- `backend/src/utils.js`
+- 仓库忽略本地 SQLite 数据库、`.env`、日志、构建目录和依赖目录。
+- 便携版仅打包运行所需的白名单文件，不读取或包含浏览器数据。
+- 删除 `database/writing-assistant.db` 会清空本地作品和人物；删除或升级前请先备份。
 
-结果：题目、作品、完成记录和统计均持久化到 SQLite，不依赖浏览器临时存储。
+## License
 
-### 3. 写作训练与编辑器
-
-新增/调整：
-
-- `frontend/src/App.jsx`
-- `frontend/src/api.js`
-- `frontend/src/utils.js`
-- `frontend/src/styles.css`
-
-结果：完成抽题、计时、Markdown 快捷工具、字数统计、自动保存和完成训练。
-
-### 4. 作品、题库与统计
-
-主要文件：
-
-- `frontend/src/App.jsx`
-- `frontend/src/styles.css`
-- `backend/src/app.js`
-
-结果：实现搜索与分类、收藏与完成筛选、7/30/90 天统计和薄弱项提示。
-
-### 5. 测试与文档
-
-新增：
-
-- `backend/tests/api.test.js`
-- `frontend/tests/utils.test.mjs`
-- `docs/ARCHITECTURE.md`
-- `docs/API.md`
-- `docs/ROADMAP.md`
-
-### 6. 动态人物身份调查档案
-
-新增/调整：
-
-- `database/seed-character-fields.json`
-- `database/schema.sql`
-- `backend/src/character-routes.js`
-- `backend/src/db.js`
-- `backend/src/app.js`
-- `backend/tests/api.test.js`
-- `frontend/src/characters.jsx`
-- `frontend/src/api.js`
-- `frontend/src/App.jsx`
-- `frontend/src/styles.css`
-
-结果：人物档案完全由 `Character_Field` 动态生成；新增、排序或隐藏字段不需要修改人物详情页代码。
-
-## 下一步计划
-
-第二阶段建议按以下顺序推进：
-
-1. 多小说项目管理，为作品、人物和世界观增加 `project_id`。
-2. 人物字段模板导入、导出与模板继承。
-3. 世界观规则库、组织与历史事件。
-4. 三幕结构与黄金三章检查。
-5. 人物关系图和时间线。
-
-第三阶段再接入 AI 评价。AI 只标记问题、给训练建议和提出问题，不直接替用户重写文章。
+[MIT](LICENSE) © 2026 [risievol2-alt](https://github.com/risievol2-alt)
