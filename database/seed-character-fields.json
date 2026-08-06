@@ -1,0 +1,707 @@
+[
+  {
+    "fieldName": "姓名",
+    "fieldType": "text",
+    "systemKey": "name",
+    "category": "身份信息",
+    "description": "人物使用的姓名或主要称呼。",
+    "sortOrder": 10,
+    "isRequired": true
+  },
+  {
+    "fieldName": "人物头像",
+    "fieldType": "image",
+    "systemKey": "avatar",
+    "category": "身份信息",
+    "description": "人物头像或视觉参考图。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "年龄",
+    "fieldType": "number",
+    "category": "身份信息",
+    "description": "人物当前年龄。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "性别",
+    "fieldType": "select",
+    "category": "身份信息",
+    "description": "人物的性别认同。",
+    "options": ["女", "男", "非二元", "未设定"],
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "出生日期",
+    "fieldType": "date",
+    "category": "身份信息",
+    "description": "人物的出生日期。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "星座",
+    "fieldType": "select",
+    "category": "身份信息",
+    "description": "按出生日期对应的星座。",
+    "options": ["白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"],
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "血型",
+    "fieldType": "select",
+    "category": "身份信息",
+    "description": "人物的血型。",
+    "options": ["A型", "B型", "AB型", "O型", "未知"],
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "出生地",
+    "fieldType": "text",
+    "category": "身份信息",
+    "description": "国家、城市或更具体的出生地点。",
+    "sortOrder": 80
+  },
+  {
+    "fieldName": "身高",
+    "fieldType": "number",
+    "category": "身体信息",
+    "description": "身高，单位可在填写内容中注明。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "体重",
+    "fieldType": "number",
+    "category": "身体信息",
+    "description": "体重，单位可在填写内容中注明。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "发色",
+    "fieldType": "text",
+    "category": "身体信息",
+    "description": "天然或当前的头发颜色。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "瞳色",
+    "fieldType": "text",
+    "category": "身体信息",
+    "description": "眼睛虹膜颜色。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "视力",
+    "fieldType": "text",
+    "category": "身体信息",
+    "description": "裸眼、矫正视力或相关情况。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "惯用手",
+    "fieldType": "select",
+    "category": "身体信息",
+    "description": "人物主要使用哪只手。",
+    "options": ["右手", "左手", "双手", "其他"],
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "音色",
+    "fieldType": "text",
+    "category": "身体信息",
+    "description": "说话或歌唱时声音的质感。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "手术史、龋齿、及其他病史",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "记录手术史、龋齿和其他既往或现有病史。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "伤痕",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "伤痕的整体情况、位置、形状与来源。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "疾病造成的痕迹",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "疾病在身体上留下的可见或不可见痕迹。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "烫伤",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "烫伤的位置、程度、外观与来源。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "淤青",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "经常出现或具有剧情意义的淤青。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "刺青",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "刺青的位置、图案、时间与含义。",
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "其他身体特征",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "不属于其他具体项目的身体特征总述。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "鼻子形状",
+    "fieldType": "text",
+    "category": "健康信息",
+    "description": "鼻子的外形特征。",
+    "sortOrder": 80
+  },
+  {
+    "fieldName": "眼睛形状",
+    "fieldType": "text",
+    "category": "健康信息",
+    "description": "眼睛的形状与显著特征。",
+    "sortOrder": 90
+  },
+  {
+    "fieldName": "乳房",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "与人物塑造相关的乳房特征或健康信息。",
+    "sortOrder": 100
+  },
+  {
+    "fieldName": "脚",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "脚部外形、健康或行动相关特征。",
+    "sortOrder": 110
+  },
+  {
+    "fieldName": "痣",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "痣的位置、形状与辨识意义。",
+    "sortOrder": 120
+  },
+  {
+    "fieldName": "其他身体特点",
+    "fieldType": "textarea",
+    "category": "健康信息",
+    "description": "尚未归入以上项目的其他身体特点。",
+    "sortOrder": 130
+  },
+  {
+    "fieldName": "人种",
+    "fieldType": "text",
+    "category": "健康信息",
+    "description": "人物所属或认同的人种背景。",
+    "sortOrder": 140
+  },
+  {
+    "fieldName": "宗教",
+    "fieldType": "select",
+    "category": "健康信息",
+    "description": "宗教信仰或无宗教立场。",
+    "options": ["无宗教", "佛教", "道教", "基督宗教", "伊斯兰教", "印度教", "其他"],
+    "sortOrder": 150
+  },
+  {
+    "fieldName": "幼儿和少年时期的精神体验、相关人物",
+    "fieldType": "textarea",
+    "category": "成长经历",
+    "description": "记录幼儿和少年时期重要的精神体验及相关人物。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "性经验、恋爱经验、性观念、婚姻",
+    "fieldType": "textarea",
+    "category": "成长经历",
+    "description": "分别记录性经验、恋爱经验、性观念与婚姻经历。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "将来的梦想、愿望",
+    "fieldType": "textarea",
+    "category": "心理信息",
+    "description": "人物对未来的梦想、愿望与期待。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "害怕的事物",
+    "fieldType": "textarea",
+    "category": "心理信息",
+    "description": "具体恐惧、深层恐惧及其来源。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "前科",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "违法犯罪记录、指控或相关社会后果。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "获奖经历",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "正式或非正式的获奖与表彰经历。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "学历",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "学校、专业、学位与其他教育经历。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "尊敬和怨恨的人",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "分别记录尊敬和怨恨的人及原因。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "人际关系、态度",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "人物对一般人际关系的处理方式与态度。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "家人间的关系、态度",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "人物与各位家人的关系及双方态度。",
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "纠纷",
+    "fieldType": "textarea",
+    "category": "社会关系",
+    "description": "现有或过去的冲突、争执与未解决问题。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "职业、学校",
+    "fieldType": "textarea",
+    "category": "职业经济",
+    "description": "当前及过去的职业、任职单位或就读学校。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "经济状况及态度",
+    "fieldType": "textarea",
+    "category": "职业经济",
+    "description": "收入、资产、债务、消费能力及对金钱的态度。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "宠物、植物",
+    "fieldType": "textarea",
+    "category": "职业经济",
+    "description": "饲养的宠物、照料的植物及与它们的关系。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "性格特征",
+    "fieldType": "tag",
+    "category": "性格",
+    "description": "可添加或删除人物性格标签。",
+    "options": ["开朗", "阴暗", "幽默", "暴力", "积极", "外向", "知性", "清洁", "表现力"],
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "口头禅",
+    "fieldType": "textarea",
+    "category": "性格",
+    "description": "人物反复使用的词句、语气或表达。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "习惯性动作",
+    "fieldType": "textarea",
+    "category": "性格",
+    "description": "无意识或反复出现的动作。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "不寻常之处",
+    "fieldType": "textarea",
+    "category": "性格",
+    "description": "人物与常人不同、难以解释或令人印象深刻之处。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "特长、招式、能力",
+    "fieldType": "tag",
+    "category": "能力特长",
+    "description": "记录人物的特长、招式和能力，可添加多个标签。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "行动是否敏捷",
+    "fieldType": "select",
+    "category": "能力特长",
+    "description": "人物行动与反应是否敏捷。",
+    "options": ["是", "否", "视情况而定"],
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "运动",
+    "fieldType": "tag",
+    "category": "能力特长",
+    "description": "擅长、熟悉或接触过的运动项目。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "舞蹈",
+    "fieldType": "text",
+    "category": "能力特长",
+    "description": "舞蹈类型与熟练程度。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "武术",
+    "fieldType": "text",
+    "category": "能力特长",
+    "description": "武术流派、训练经历与熟练程度。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "枪械",
+    "fieldType": "text",
+    "category": "能力特长",
+    "description": "枪械知识、使用经历与熟练程度。",
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "驾驶",
+    "fieldType": "text",
+    "category": "能力特长",
+    "description": "可驾驶的交通工具与熟练程度。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "外语",
+    "fieldType": "tag",
+    "category": "能力特长",
+    "description": "掌握或正在学习的外语。",
+    "sortOrder": 80
+  },
+  {
+    "fieldName": "其他资格证",
+    "fieldType": "tag",
+    "category": "能力特长",
+    "description": "其他职业、技能或专业资格证书。",
+    "sortOrder": 90
+  },
+  {
+    "fieldName": "长处",
+    "fieldType": "textarea",
+    "category": "能力特长",
+    "description": "人物在行动、性格与社会适应方面的长处。",
+    "sortOrder": 100
+  },
+  {
+    "fieldName": "短处",
+    "fieldType": "textarea",
+    "category": "能力特长",
+    "description": "人物在行动、性格与社会适应方面的短处。",
+    "sortOrder": 110
+  },
+  {
+    "fieldName": "爱好",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "长期投入或主动选择的爱好。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "娱乐",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "常用的娱乐方式。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "好恶",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "喜欢与厌恶的事物及原因。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "衣食住行",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "衣、食、住、行四方面的偏好与状态。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "习惯",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "日常、工作、睡眠或社交习惯。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "喜欢的音乐",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "喜欢的歌曲、音乐人或代表作品。",
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "音乐类型",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "偏好的音乐类型。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "报纸",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "常读或关注的报纸。",
+    "sortOrder": 80
+  },
+  {
+    "fieldName": "文学",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "文学偏好、作家或作品。",
+    "sortOrder": 90
+  },
+  {
+    "fieldName": "杂志",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "常读或关注的杂志。",
+    "sortOrder": 100
+  },
+  {
+    "fieldName": "电影",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "电影类型、导演或作品偏好。",
+    "sortOrder": 110
+  },
+  {
+    "fieldName": "创作",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "参与的创作类型与代表内容。",
+    "sortOrder": 120
+  },
+  {
+    "fieldName": "收藏",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "收藏对象、规模与原因。",
+    "sortOrder": 130
+  },
+  {
+    "fieldName": "喜欢的颜色",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "喜欢的颜色，可填写多个。",
+    "sortOrder": 140
+  },
+  {
+    "fieldName": "讨厌的颜色",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "讨厌的颜色，可填写多个。",
+    "sortOrder": 150
+  },
+  {
+    "fieldName": "喜欢的香味",
+    "fieldType": "text",
+    "category": "兴趣习惯",
+    "description": "喜欢的气味、香调或具体香水。",
+    "sortOrder": 160
+  },
+  {
+    "fieldName": "家居装潢",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "家居装潢风格与生活空间细节。",
+    "sortOrder": 170
+  },
+  {
+    "fieldName": "服装风格",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "日常、工作与特殊场合的服装风格。",
+    "sortOrder": 180
+  },
+  {
+    "fieldName": "喜欢的场所",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "让人物感到舒适、兴奋或安全的场所。",
+    "sortOrder": 190
+  },
+  {
+    "fieldName": "家",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "人物对家的定义、居住状态与情感。",
+    "sortOrder": 200
+  },
+  {
+    "fieldName": "土地",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "拥有、依恋、争夺或失去的土地。",
+    "sortOrder": 210
+  },
+  {
+    "fieldName": "人物偏好",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "在人际、恋爱或合作中偏好的人物类型。",
+    "sortOrder": 220
+  },
+  {
+    "fieldName": "常去的店",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "经常光顾的商店、餐馆或其他店铺。",
+    "sortOrder": 230
+  },
+  {
+    "fieldName": "常买的品牌",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "经常购买或忠诚的品牌。",
+    "sortOrder": 240
+  },
+  {
+    "fieldName": "是否佩戴项链",
+    "fieldType": "select",
+    "category": "兴趣习惯",
+    "description": "人物是否佩戴项链及频率。",
+    "options": ["是", "否", "偶尔"],
+    "sortOrder": 250
+  },
+  {
+    "fieldName": "是否佩戴戒指",
+    "fieldType": "select",
+    "category": "兴趣习惯",
+    "description": "人物是否佩戴戒指及频率。",
+    "options": ["是", "否", "偶尔"],
+    "sortOrder": 260
+  },
+  {
+    "fieldName": "饰品",
+    "fieldType": "tag",
+    "category": "兴趣习惯",
+    "description": "经常佩戴、收藏或具有意义的饰品。",
+    "sortOrder": 270
+  },
+  {
+    "fieldName": "嗜好",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "可能形成依赖或强迫倾向的嗜好。",
+    "sortOrder": 280
+  },
+  {
+    "fieldName": "毒品",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "人物与毒品相关的经历、态度或影响。",
+    "sortOrder": 290
+  },
+  {
+    "fieldName": "讲究的东西",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "人物特别在意标准、品质或仪式感的事物。",
+    "sortOrder": 300
+  },
+  {
+    "fieldName": "无意义的事",
+    "fieldType": "textarea",
+    "category": "兴趣习惯",
+    "description": "人物认为无意义，却仍可能参与或重复的事。",
+    "sortOrder": 310
+  },
+  {
+    "fieldName": "其他",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "无法归入现有调查项目的其他内容。",
+    "sortOrder": 10
+  },
+  {
+    "fieldName": "葡萄酒",
+    "fieldType": "text",
+    "category": "其他",
+    "description": "对葡萄酒的知识、偏好、酒量或经历。",
+    "sortOrder": 20
+  },
+  {
+    "fieldName": "食物",
+    "fieldType": "tag",
+    "category": "其他",
+    "description": "具有代表性的食物偏好或相关经历。",
+    "sortOrder": 30
+  },
+  {
+    "fieldName": "超能力",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "超能力的表现、限制、代价与来源。",
+    "sortOrder": 40
+  },
+  {
+    "fieldName": "灵力",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "灵力的性质、强度、使用方式与限制。",
+    "sortOrder": 50
+  },
+  {
+    "fieldName": "占卜",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "占卜能力、经验、相信程度或相关事件。",
+    "sortOrder": 60
+  },
+  {
+    "fieldName": "口音",
+    "fieldType": "text",
+    "category": "其他",
+    "description": "口音、方言与说话节奏。",
+    "sortOrder": 70
+  },
+  {
+    "fieldName": "野性的直觉",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "未经推理却能感知危险、机会或他人意图的直觉。",
+    "sortOrder": 80
+  },
+  {
+    "fieldName": "其他特殊信息",
+    "fieldType": "textarea",
+    "category": "其他",
+    "description": "其他具有剧情意义的特殊信息。",
+    "sortOrder": 90
+  }
+]

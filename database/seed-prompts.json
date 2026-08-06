@@ -1,0 +1,110 @@
+[
+  {
+    "title": "凌晨的废弃影院",
+    "type": "场景描写",
+    "difficulty": "进阶",
+    "description": "描写一个人在凌晨独自进入废弃电影院。",
+    "requirements": ["不允许直接使用“恐怖”", "必须出现一种声音", "必须出现一个异常物品"],
+    "wordLimit": 800,
+    "durationMinutes": 25
+  },
+  {
+    "title": "雨夜等待",
+    "type": "场景描写",
+    "difficulty": "简单",
+    "description": "描写一个人在末班车站等待一位不会来的人。",
+    "requirements": ["加入一种持续的声音", "至少描写两次光影变化", "不直接说明人物心情"],
+    "wordLimit": 800,
+    "durationMinutes": 25
+  },
+  {
+    "title": "藏不住的秘密",
+    "type": "人物描写",
+    "difficulty": "进阶",
+    "description": "塑造一个极力隐藏秘密，却不断露出破绽的人。",
+    "requirements": ["通过三个细节表现紧张", "不能使用心理独白", "秘密不在结尾揭晓"],
+    "wordLimit": 1000,
+    "durationMinutes": 30
+  },
+  {
+    "title": "拥挤电梯里的失控",
+    "type": "动作描写",
+    "difficulty": "简单",
+    "description": "电梯突然下坠三层，描写十秒内发生的动作。",
+    "requirements": ["至少三个人产生不同反应", "使用长短句制造节奏", "动作必须改变人物关系"],
+    "wordLimit": 600,
+    "durationMinutes": 20
+  },
+  {
+    "title": "狭巷反击",
+    "type": "战斗描写",
+    "difficulty": "挑战",
+    "description": "主角手无寸铁，在狭窄雨巷中面对两个持械对手。",
+    "requirements": ["利用至少两个环境物品", "双方都必须犯错", "战斗结果留下后患"],
+    "wordLimit": 1200,
+    "durationMinutes": 35
+  },
+  {
+    "title": "迟到的道歉",
+    "type": "情绪描写",
+    "difficulty": "进阶",
+    "description": "多年后，一个人终于收到曾经渴望的道歉。",
+    "requirements": ["不出现“原谅”二字", "加入一个重复动作", "结尾用物品收束情绪"],
+    "wordLimit": 900,
+    "durationMinutes": 30
+  },
+  {
+    "title": "两个人都在撒谎",
+    "type": "对话训练",
+    "difficulty": "挑战",
+    "description": "两人围绕一把丢失的钥匙交谈，双方都知道对方在撒谎。",
+    "requirements": ["不直接指出谎言", "至少有一次答非所问", "用停顿改变权力关系"],
+    "wordLimit": 1000,
+    "durationMinutes": 30
+  },
+  {
+    "title": "门外的快递员",
+    "type": "开篇训练",
+    "difficulty": "简单",
+    "description": "用不超过三百字写一个开篇：门外的快递员认识屋里从未见过他的人。",
+    "requirements": ["第一句包含动作", "前三段出现冲突", "留下一个明确疑问"],
+    "wordLimit": 300,
+    "durationMinutes": 15
+  },
+  {
+    "title": "灯熄灭之后",
+    "type": "剧情续写",
+    "difficulty": "进阶",
+    "description": "续写：整座城市的灯同时熄灭，只有她手里的旧手机亮了起来。",
+    "requirements": ["引入一个选择", "给出错误线索", "结尾让风险升级"],
+    "wordLimit": 1200,
+    "durationMinutes": 35
+  },
+  {
+    "title": "有代价的愿望规则",
+    "type": "设定扩展",
+    "difficulty": "挑战",
+    "description": "设计一个“愿望只能在愿望空间生效”的世界规则，并写出它造成的日常影响。",
+    "requirements": ["解释规则来源", "设计两个漏洞", "举出一个普通人的使用案例"],
+    "wordLimit": 1200,
+    "durationMinutes": 40
+  },
+  {
+    "title": "一句话的决裂",
+    "type": "对话训练",
+    "difficulty": "进阶",
+    "description": "让一场看似平静的早餐对话，以一句日常用语完成决裂。",
+    "requirements": ["对话不超过十二轮", "不使用感叹号", "关键冲突用潜台词表达"],
+    "wordLimit": 700,
+    "durationMinutes": 25
+  },
+  {
+    "title": "被记错的英雄",
+    "type": "人物描写",
+    "difficulty": "挑战",
+    "description": "描写一位被所有人歌颂，却确信自己不配得到赞誉的人。",
+    "requirements": ["展示一个反常习惯", "加入旁人的误解", "不给出完整往事"],
+    "wordLimit": 1000,
+    "durationMinutes": 30
+  }
+]
