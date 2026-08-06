@@ -1,0 +1,13 @@
+{
+  "name": "inkstone-writing-assistant",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "setup": "pnpm --dir frontend install && pnpm --dir backend install",
+    "dev:frontend": "pnpm --dir frontend dev",
+    "dev:backend": "pnpm --dir backend dev",
+    "build": "pnpm --dir frontend build",
+    "test": "pnpm --dir backend test && pnpm --dir frontend test"
+  }
+}
