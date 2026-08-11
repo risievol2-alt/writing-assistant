@@ -30,7 +30,19 @@
 - **本地优先**：SQLite 本机存储，不上传文章；桌面与移动尺寸均可使用。
 - **AI 接口预留**：未来只帮助发现问题和给出训练建议，不直接替作者改稿。
 
-## Windows 免安装运行
+## Windows 桌面应用
+
+从 [Releases](https://github.com/risievol2-alt/writing-assistant/releases/latest) 下载最新的 `*-setup.exe`，双击即可安装 Tauri 桌面版。桌面版自带应用运行所需的 Node.js 后端，不要求用户安装 Node.js、pnpm 或 SQLite。
+
+桌面版数据保存在：
+
+```text
+%APPDATA%\com.risievol2.inkstone\writing-assistant.db
+```
+
+数据库不放在安装目录中，因此覆盖安装或版本升级不会清空作品。后端运行日志位于同目录的 `backend.log`。
+
+## Windows 免安装便携版
 
 不想配置开发环境时，可从 [Releases](https://github.com/risievol2-alt/writing-assistant/releases/latest) 下载 `windows-x64.zip`：
 
@@ -47,9 +59,10 @@
 | 前端 | React 19、Vite、Tailwind CSS 4 | 单页应用，响应式侧边栏/底部导航，生产文件由 Express 托管 |
 | 后端 | Node.js、Express 5 | REST API，统一提供训练、作品、统计和人物档案能力 |
 | 数据库 | SQLite、`node:sqlite` | 零配置本地持久化，启动时自动建表并初始化题库与人物字段 |
+| 桌面应用 | Tauri 2、Rust、WebView2 | 内置 Node/Express 资源，随机本地端口，数据库写入系统应用数据目录 |
 | 人物系统 | 动态键值模型 | `Character`、`Character_Field`、`Character_Value`，新增字段无需修改详情页代码 |
 | 测试 | Node.js Test Runner | API、统计、动态字段、搜索筛选和工具函数测试 |
-| 发布 | PowerShell、GitHub Releases | 白名单构建 Windows x64 便携 ZIP，运行时与源码分离 |
+| 发布 | Tauri、PowerShell、GitHub Actions | 生成 Windows x64 NSIS 安装包与免安装便携 ZIP |
 
 ```text
 writing-assistant
@@ -58,6 +71,7 @@ writing-assistant
 ├── database          # Schema、题库与人物字段种子
 ├── docs              # 架构、接口、路线图与截图
 ├── scripts           # 便携版构建脚本
+├── src-tauri         # Tauri 桌面壳、应用图标与 Windows 打包配置
 ├── LICENSE
 └── README.md
 ```
@@ -70,28 +84,57 @@ writing-assistant
 git clone https://github.com/risievol2-alt/writing-assistant.git
 cd writing-assistant
 pnpm setup
+pnpm dev
 ```
 
-开发时打开两个终端：
+`pnpm dev` 会在同一个终端中启动前后端，并自动打开 `http://127.0.0.1:5173`。按 `Ctrl+C` 会同时停止两个服务。
+
+如需分别排查前后端，仍可使用原有命令：
 
 ```bash
-# 终端一：后端
 pnpm dev:backend
-
-# 终端二：前端
 pnpm dev:frontend
 ```
 
-访问 `http://127.0.0.1:5173`。数据库会自动创建在 `database/writing-assistant.db`。
+数据库会自动创建在 `database/writing-assistant.db`。
 
-生产方式运行：
+以统一应用模式运行：
 
 ```bash
-pnpm build
-pnpm --dir backend start
+pnpm start
 ```
 
-访问 `http://127.0.0.1:8787`。
+该命令会先构建前端，再启动唯一的 Express 服务并自动打开 `http://127.0.0.1:8787`。Windows 用户完成一次 `pnpm setup` 后，也可以直接双击仓库根目录的 `Start-Inkstone.cmd`。
+
+## Tauri 桌面版开发
+
+Windows 本地构建需要 Rust stable、Microsoft C++ Build Tools 和 WebView2。安装依赖后运行：
+
+```bash
+pnpm setup
+pnpm desktop:dev
+```
+
+`desktop:dev` 会启动 Vite、Express 和 Tauri 窗口。生成 Windows x64 安装包：
+
+```bash
+pnpm desktop:build
+```
+
+NSIS 安装包输出到：
+
+```text
+src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/
+```
+
+推送与 `package.json` 版本一致的标签会自动测试、构建并发布 GitHub Release：
+
+```bash
+git tag v0.3.0
+git push origin v0.3.0
+```
+
+Release 工作流要求提前配置 `WINDOWS_CERTIFICATE`（Base64 编码的 PFX）和 `WINDOWS_CERTIFICATE_PASSWORD` 两个 GitHub Actions Secrets。构建会签署应用与安装包，验证 Authenticode 状态后才公开 Release；详细配置见 [Tauri 桌面版](docs/DESKTOP.md#windows-代码签名)。
 
 ## 测试与便携版构建
 
@@ -106,13 +149,14 @@ pnpm portable
 
 - [API 说明](docs/API.md)
 - [架构设计](docs/ARCHITECTURE.md)
+- [Tauri 桌面版](docs/DESKTOP.md)
 - [开发路线图](docs/ROADMAP.md)
 
 人物档案没有把年龄、身高、性格等字段写死在人物主表中：字段定义保存在 `Character_Field`，人物填写内容保存在 `Character_Value`。用户新增“喜欢的武器”等字段后，所有人物档案会自动显示，无需修改前端页面。
 
 ## 简历项目描述
 
-> **砚习 · 个人写作训练助手** — 独立完成 React、Express 与 SQLite 全栈应用，实现每日写作训练、自动保存、成长统计及 99 字段动态人物档案系统；设计可扩展的动态字段数据模型，并提供 GitHub Release **Windows 免安装运行**版本。项目地址：https://github.com/risievol2-alt/writing-assistant
+> **砚习 · 个人写作训练助手** — 独立完成 React、Express、SQLite 与 Tauri 桌面应用，实现每日写作训练、自动保存、成长统计及 99 字段动态人物档案系统；设计可扩展的动态字段数据模型，并提供 GitHub Release **Windows 安装版与免安装版**。项目地址：https://github.com/risievol2-alt/writing-assistant
 
 ## 路线图
 
@@ -124,9 +168,9 @@ pnpm portable
 
 ## 数据与隐私
 
-- 仓库忽略本地 SQLite 数据库、`.env`、日志、构建目录和依赖目录。
+- 仓库忽略本地 SQLite 数据库、`.env`、日志、Tauri 暂存资源、构建目录和依赖目录。
 - 便携版仅打包运行所需的白名单文件，不读取或包含浏览器数据。
-- 删除 `database/writing-assistant.db` 会清空本地作品和人物；删除或升级前请先备份。
+- Web/便携版删除 `database/writing-assistant.db` 会清空本地作品和人物；桌面安装版对应 `%APPDATA%\com.risievol2.inkstone\writing-assistant.db`。删除前请先备份。
 
 ## License
 

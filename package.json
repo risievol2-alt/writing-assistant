@@ -1,14 +1,22 @@
 {
   "name": "inkstone-writing-assistant",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "setup": "pnpm --dir frontend install && pnpm --dir backend install",
+    "setup": "pnpm install && pnpm --dir frontend install && pnpm --dir backend install",
+    "dev": "node scripts/launch.mjs dev",
     "dev:frontend": "pnpm --dir frontend dev",
     "dev:backend": "pnpm --dir backend dev",
     "build": "pnpm --dir frontend build",
-    "test": "pnpm --dir backend test && pnpm --dir frontend test",
-    "portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-portable.ps1"
+    "start": "node scripts/launch.mjs start",
+    "test": "pnpm --dir backend test && pnpm --dir frontend test && node --test scripts/*.test.mjs",
+    "portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-portable.ps1",
+    "tauri:prepare": "node scripts/prepare-tauri.mjs",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build --target x86_64-pc-windows-msvc"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4"
   }
 }

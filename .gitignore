@@ -12,3 +12,13 @@ database/*.db-wal
 .DS_Store
 Thumbs.db
 /artifacts/
+/src-tauri/target/
+/src-tauri/gen/
+/src-tauri/resources/
+
+# Windows code-signing private material
+*.pfx
+*.p12
+*.pfx.base64
+*.p12.base64
+*.key

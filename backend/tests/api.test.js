@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
+import { resolve } from "node:path";
 import { createApp } from "../src/app.js";
-import { createDatabase } from "../src/db.js";
+import { createDatabase, resolveDatabasePath } from "../src/db.js";
 
 let server;
 let baseUrl;
@@ -21,6 +22,14 @@ before(async () => {
 after(async () => {
   database.close();
   await new Promise((resolve) => server.close(resolve));
+});
+
+test("桌面模式将数据库放入独立应用数据目录", () => {
+  const dataDirectory = resolve("test-data", "inkstone");
+  assert.equal(
+    resolveDatabasePath(dataDirectory),
+    resolve(dataDirectory, "writing-assistant.db"),
+  );
 });
 
 test("题库能够按类型随机抽题并切换收藏", async () => {

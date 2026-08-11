@@ -14,6 +14,13 @@ const characterFieldSeedPath = resolve(
   "seed-character-fields.json",
 );
 
+export function resolveDatabasePath(dataDirectory = process.env.INKSTONE_DATA_DIR) {
+  const normalizedDirectory = String(dataDirectory || "").trim();
+  return normalizedDirectory
+    ? resolve(normalizedDirectory, "writing-assistant.db")
+    : resolve(projectRoot, "database", "writing-assistant.db");
+}
+
 export function mapPrompt(row) {
   if (!row) return null;
   return {
@@ -54,7 +61,7 @@ export function mapWork(row) {
   };
 }
 
-export function createDatabase(filename = resolve(projectRoot, "database", "writing-assistant.db")) {
+export function createDatabase(filename = resolveDatabasePath()) {
   if (filename !== ":memory:") {
     mkdirSync(dirname(filename), { recursive: true });
   }

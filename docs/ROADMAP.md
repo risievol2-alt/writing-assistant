@@ -12,6 +12,14 @@
 
 ## 第二阶段
 
+### 2.0 Tauri 桌面化交付：已完成
+
+- 现有 React/Express 项目接入 Tauri 2
+- Node 后端与 SQLite 初始化资源随应用打包
+- 数据库迁移到系统应用数据目录
+- Windows x64 NSIS `setup.exe`
+- Git 标签触发 GitHub Releases 自动发布
+
 ### 2.1 多小说管理
 
 - 小说项目表

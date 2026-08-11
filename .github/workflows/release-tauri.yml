@@ -1,0 +1,190 @@
+name: Release Tauri Windows
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tauri-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.13.1
+          cache: pnpm
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --dir frontend install --frozen-lockfile
+          pnpm --dir backend install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Verify release tag
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ("v$version" -ne "${{ github.ref_name }}") {
+            throw "Tag ${{ github.ref_name }} does not match package version v$version"
+          }
+
+      - name: Import Windows code-signing certificate
+        id: windows-signing
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          if ([string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE)) {
+            throw "Missing WINDOWS_CERTIFICATE repository secret (Base64-encoded PFX)."
+          }
+          if ([string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE_PASSWORD)) {
+            throw "Missing WINDOWS_CERTIFICATE_PASSWORD repository secret."
+          }
+
+          $pfxPath = Join-Path $env:RUNNER_TEMP "inkstone-code-signing.pfx"
+          $configPath = Join-Path $env:RUNNER_TEMP "tauri-signing.conf.json"
+          $certificateThumbprint = $null
+
+          try {
+            try {
+              $certificateBytes = [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE)
+            } catch {
+              throw "WINDOWS_CERTIFICATE is not valid Base64."
+            }
+
+            [IO.File]::WriteAllBytes($pfxPath, $certificateBytes)
+            $securePassword = ConvertTo-SecureString `
+              -String $env:WINDOWS_CERTIFICATE_PASSWORD `
+              -AsPlainText `
+              -Force
+            $importedCertificates = @(
+              Import-PfxCertificate `
+                -FilePath $pfxPath `
+                -CertStoreLocation Cert:\CurrentUser\My `
+                -Password $securePassword
+            )
+            $certificate = $importedCertificates |
+              Where-Object { $_.HasPrivateKey } |
+              Select-Object -First 1
+
+            if ($null -eq $certificate) {
+              throw "The imported PFX does not contain a certificate with a private key."
+            }
+            if ($certificate.NotAfter -le (Get-Date)) {
+              throw "The Windows code-signing certificate has expired."
+            }
+
+            $certificateThumbprint = $certificate.Thumbprint
+            $signingConfig = @{
+              bundle = @{
+                windows = @{
+                  certificateThumbprint = $certificateThumbprint
+                }
+              }
+            }
+            $signingConfig |
+              ConvertTo-Json -Depth 4 -Compress |
+              Set-Content -LiteralPath $configPath -Encoding utf8
+
+            "config=$configPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "thumbprint=$certificateThumbprint" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } catch {
+            if (-not [string]::IsNullOrWhiteSpace($certificateThumbprint)) {
+              $storePath = "Cert:\CurrentUser\My\$certificateThumbprint"
+              if (Test-Path -LiteralPath $storePath) {
+                Remove-Item -LiteralPath $storePath -Force
+              }
+            }
+            throw
+          } finally {
+            if (Test-Path -LiteralPath $pfxPath) {
+              Remove-Item -LiteralPath $pfxPath -Force
+            }
+          }
+
+      - name: Build signed Windows installer
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "砚习 ${{ github.ref_name }}"
+          releaseBody: |
+            Windows x64 已签名桌面安装版。作品与人物数据保存在系统应用数据目录，升级不会覆盖数据库。
+          releaseDraft: true
+          prerelease: false
+          args: --target x86_64-pc-windows-msvc --config "${{ steps.windows-signing.outputs.config }}"
+
+      - name: Verify Authenticode signatures
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $releaseRoot = "src-tauri/target/x86_64-pc-windows-msvc/release"
+          $app = Get-Item -LiteralPath "$releaseRoot/inkstone-writing-assistant.exe"
+          $installers = @(
+            Get-ChildItem -LiteralPath "$releaseRoot/bundle/nsis" -Filter "*-setup.exe"
+          )
+
+          if ($installers.Count -ne 1) {
+            throw "Expected exactly one NSIS installer, found $($installers.Count)."
+          }
+
+          foreach ($artifact in @($app, $installers[0])) {
+            $signature = Get-AuthenticodeSignature -LiteralPath $artifact.FullName
+            if ($signature.Status -ne [System.Management.Automation.SignatureStatus]::Valid) {
+              throw "Invalid Authenticode signature for $($artifact.Name): $($signature.Status)"
+            }
+            Write-Host "Verified signature: $($artifact.Name) [$($signature.SignerCertificate.Subject)]"
+          }
+
+      - name: Publish verified release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${{ github.ref_name }}" --draft=false --repo "${{ github.repository }}"
+
+      - name: Remove code-signing certificate
+        if: always() && steps.windows-signing.outputs.thumbprint != ''
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE_THUMBPRINT: ${{ steps.windows-signing.outputs.thumbprint }}
+        run: |
+          $storePath = "Cert:\CurrentUser\My\$env:WINDOWS_CERTIFICATE_THUMBPRINT"
+          if (Test-Path -LiteralPath $storePath) {
+            Remove-Item -LiteralPath $storePath -Force
+          }

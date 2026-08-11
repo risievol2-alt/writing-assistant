@@ -20,6 +20,39 @@ database/writing-assistant.db
 
 生产环境中由 Express 直接提供 `frontend/dist`，不再需要 Vite。
 
+Tauri 桌面版请求流：
+
+```text
+Tauri WebView2 窗口
+  ↓ 随机 127.0.0.1 端口
+内置 Node.js + Express
+  ↓ node:sqlite
+%APPDATA%/com.risievol2.inkstone/writing-assistant.db
+```
+
+正式构建先将 Node 运行时、标准生产 `node_modules`、后端源码、前端 `dist`、Schema 和种子 JSON 暂存为 Tauri resources。该暂存目录受 Git 忽略且构建脚本会拒绝清理任何非固定目标目录；本地数据库和 `.env` 不会进入安装包。
+
+## 启动模式
+
+- `pnpm dev` 通过统一启动器同时管理 Vite 与 Express，任一服务退出时会停止另一服务。
+- `pnpm start` 先构建前端，再只保留一个 Express 应用进程，同时提供页面与 `/api`。
+- 两种模式默认都会在服务就绪后打开浏览器；自动化环境可传入 `--no-open`。
+- 原有 `pnpm dev:frontend` 与 `pnpm dev:backend` 保留，用于单独排查前端或后端。
+- `pnpm desktop:dev` 复用开发服务并打开 Tauri 窗口。
+- `pnpm desktop:build` 生成 Windows x64 NSIS `setup.exe`。
+
+## 桌面进程与数据生命周期
+
+- 开发模式由 Tauri 的 `beforeDevCommand` 启动统一 Web 开发入口。
+- 正式桌面版从安装资源启动内置 Node 后端，先选择空闲端口，确认服务就绪后再创建窗口。
+- 主窗口关闭时，Tauri 会停止它启动的后端子进程。
+- 数据库与 `backend.log` 写入系统 app data，而不是只读安装目录，因此升级应用不会覆盖写作数据。
+- WebView 仅允许导航到本次启动选择的 `127.0.0.1` 端口，页面不获得 Tauri IPC 权限。
+
+## 桌面发布
+
+`.github/workflows/release-tauri.yml` 监听 `v*` 标签，在 Windows x64 Runner 上安装依赖、运行测试并导入 GitHub Secrets 中的 PFX 代码签名证书。Tauri 使用证书指纹、SHA-256 和 RFC 3161 时间戳签署应用程序与 NSIS 安装包。官方 Action 先创建草稿 Release；只有两个 `.exe` 的 Authenticode 状态均为 `Valid` 才公开发布。工作流会拒绝与 `package.json` 版本不一致的标签，也会在签名 Secret 缺失或证书无效时失败。
+
 ## 数据模型
 
 ### prompts
