@@ -51,7 +51,7 @@ Tauri WebView2 窗口
 
 ## 桌面发布
 
-`.github/workflows/ci.yml` 监听普通分支 push 与 Pull Request，在 Windows x64 Runner 上运行测试并完整构建 unsigned NSIS 安装包，但不上传产物或创建 Release。
+`.github/workflows/ci.yml` 监听直接推送 `main` 与 Pull Request，在 Windows x64 Runner 上运行测试并完整构建 unsigned NSIS 安装包，但不上传产物或创建 Release。功能分支只通过 PR 触发，避免同一提交同时运行 push 与 PR 两份构建。
 
 `.github/workflows/release-tauri.yml` 监听 `v*` 标签并要求标签与 `package.json` 版本一致。`-beta` / `-beta.N` 版本明确使用 `--no-sign` 并发布为 GitHub Pre-release；其他预发布后缀会被拒绝。无后缀正式版本从 GitHub Secrets 导入 PFX，Tauri 使用证书指纹、SHA-256 和 RFC 3161 时间戳签署应用程序与 NSIS 安装包。官方 Action 先创建草稿 Release；只有两个 `.exe` 的 Authenticode 状态均为 `Valid` 才公开发布。
 

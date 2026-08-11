@@ -6,13 +6,14 @@ import path from "node:path";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-test("普通 push 和 PR 只测试构建而不发布", async () => {
+test("main push 和 PR 只测试构建而不发布", async () => {
   const workflow = await readFile(
     path.join(projectRoot, ".github", "workflows", "ci.yml"),
     "utf8",
   );
 
   assert.match(workflow, /push:/);
+  assert.match(workflow, /- main/);
   assert.match(workflow, /pull_request:/);
   assert.match(workflow, /pnpm test/);
   assert.match(workflow, /pnpm desktop:build --no-sign/);

@@ -49,7 +49,7 @@ pnpm desktop:build
 
 | 触发方式 | 测试 | Windows 构建 | 签名 | 发布 |
 | --- | --- | --- | --- | --- |
-| 普通分支 push / Pull Request | 是 | 是 | 否 | 不发布 |
+| 直接 push `main` / Pull Request | 是 | 是 | 否 | 不发布 |
 | `vX.Y.Z-beta` / `vX.Y.Z-beta.N` | 是 | 是 | 允许 unsigned | GitHub Pre-release |
 | `vX.Y.Z` | 是 | 是 | 必须 Signed | 正式 GitHub Release |
 

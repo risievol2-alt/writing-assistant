@@ -127,7 +127,7 @@ NSIS 安装包输出到：
 src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/
 ```
 
-普通分支 push 和 Pull Request 会自动测试并构建 Windows 安装包，但不会创建 Release。推送与 `package.json` 版本一致的标签时按版本通道发布：
+直接 push 到 `main` 或创建 Pull Request 会自动测试并构建 Windows 安装包，但不会创建 Release。推送与 `package.json` 版本一致的标签时按版本通道发布：
 
 | 版本 | 签名策略 | GitHub 发布 |
 | --- | --- | --- |
