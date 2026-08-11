@@ -127,14 +127,21 @@ NSIS 安装包输出到：
 src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/
 ```
 
-推送与 `package.json` 版本一致的标签会自动测试、构建并发布 GitHub Release：
+普通分支 push 和 Pull Request 会自动测试并构建 Windows 安装包，但不会创建 Release。推送与 `package.json` 版本一致的标签时按版本通道发布：
+
+| 版本 | 签名策略 | GitHub 发布 |
+| --- | --- | --- |
+| `vX.Y.Z-beta` / `vX.Y.Z-beta.N` | 允许 unsigned | Pre-release |
+| `vX.Y.Z`（包括 `v1.0.0`） | 必须 Authenticode Signed | 正式 Release |
+
+当前 Beta 标签：
 
 ```bash
-git tag v0.3.0
-git push origin v0.3.0
+git tag v0.3.1-beta
+git push origin v0.3.1-beta
 ```
 
-Release 工作流要求提前配置 `WINDOWS_CERTIFICATE`（Base64 编码的 PFX）和 `WINDOWS_CERTIFICATE_PASSWORD` 两个 GitHub Actions Secrets。构建会签署应用与安装包，验证 Authenticode 状态后才公开 Release；详细配置见 [Tauri 桌面版](docs/DESKTOP.md#windows-代码签名)。
+正式 Release 工作流要求提前配置 `WINDOWS_CERTIFICATE`（Base64 编码的 PFX）和 `WINDOWS_CERTIFICATE_PASSWORD` 两个 GitHub Actions Secrets。正式构建会签署应用与安装包，验证 Authenticode 状态后才公开；Beta 明确传入 `--no-sign`。详细配置见 [Tauri 桌面版](docs/DESKTOP.md#windows-代码签名)。
 
 ## 测试与便携版构建
 

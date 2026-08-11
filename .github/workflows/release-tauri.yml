@@ -52,7 +52,8 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Verify release tag
+      - name: Verify release tag and channel
+        id: release-channel
         shell: pwsh
         run: |
           $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
@@ -60,7 +61,32 @@ jobs:
             throw "Tag ${{ github.ref_name }} does not match package version v$version"
           }
 
+          if ($version -match '-beta(?:\.\d+)?$') {
+            $channel = "beta"
+          } elseif ($version.Contains("-")) {
+            throw "Only -beta or -beta.N prerelease versions may be published unsigned."
+          } else {
+            $channel = "stable"
+          }
+
+          "channel=$channel" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Build unsigned beta pre-release
+        if: steps.release-channel.outputs.channel == 'beta'
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "砚习 ${{ github.ref_name }} (Beta)"
+          releaseBody: |
+            Windows x64 Beta 预览版，未进行 Authenticode 代码签名，可能触发 Windows SmartScreen 提示。作品与人物数据保存在系统应用数据目录。
+          releaseDraft: false
+          prerelease: true
+          args: --target x86_64-pc-windows-msvc --no-sign
+
       - name: Import Windows code-signing certificate
+        if: steps.release-channel.outputs.channel == 'stable'
         id: windows-signing
         shell: pwsh
         env:
@@ -105,6 +131,9 @@ jobs:
             if ($null -eq $certificate) {
               throw "The imported PFX does not contain a certificate with a private key."
             }
+            if ($certificate.NotBefore -gt (Get-Date)) {
+              throw "The Windows code-signing certificate is not valid yet."
+            }
             if ($certificate.NotAfter -le (Get-Date)) {
               throw "The Windows code-signing certificate has expired."
             }
@@ -137,7 +166,8 @@ jobs:
             }
           }
 
-      - name: Build signed Windows installer
+      - name: Build signed stable release
+        if: steps.release-channel.outputs.channel == 'stable'
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -145,12 +175,13 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "砚习 ${{ github.ref_name }}"
           releaseBody: |
-            Windows x64 已签名桌面安装版。作品与人物数据保存在系统应用数据目录，升级不会覆盖数据库。
+            Windows x64 已签名正式桌面版。作品与人物数据保存在系统应用数据目录，升级不会覆盖数据库。
           releaseDraft: true
           prerelease: false
           args: --target x86_64-pc-windows-msvc --config "${{ steps.windows-signing.outputs.config }}"
 
-      - name: Verify Authenticode signatures
+      - name: Verify stable Authenticode signatures
+        if: steps.release-channel.outputs.channel == 'stable'
         shell: pwsh
         run: |
           $ErrorActionPreference = "Stop"
@@ -172,7 +203,8 @@ jobs:
             Write-Host "Verified signature: $($artifact.Name) [$($signature.SignerCertificate.Subject)]"
           }
 
-      - name: Publish verified release
+      - name: Publish verified stable release
+        if: steps.release-channel.outputs.channel == 'stable'
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

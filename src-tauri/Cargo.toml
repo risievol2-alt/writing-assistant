@@ -1,6 +1,6 @@
 [package]
 name = "inkstone-writing-assistant"
-version = "0.3.0"
+version = "0.3.1-beta"
 description = "砚习 · 个人写作训练助手"
 authors = ["risievol2-alt"]
 license = "MIT"
